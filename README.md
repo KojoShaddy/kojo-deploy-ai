@@ -13,6 +13,7 @@
 - **AI-Driven Workflows**: Instead of memorizing complex flags, tell Gemini what you want to achieve.
 - **GCP Optimized**: Specifically tuned for Google Cloud Run environments, handling service names, regions, and environment flags natively.
 - **MCP Standard**: Built on the Model Context Protocol, ensuring a standardized "bridge" between the LLM and your local system.
+- **Windows Optimized**: Includes native support for Windows environments, resolving common execution policy and path issues.
 
 ## Prerequisites
 
@@ -82,9 +83,20 @@ gemini extensions disable kojo-deploy-ai
 
 To turn it back on later, just run `gemini extensions enable kojo-deploy-ai`.
 
+## Local Development
+
+If you want to modify the extension or test changes locally:
+
+1. Clone the repository.
+2. Install dependencies: `npm install`.
+3. Link the extension to your Gemini CLI:
+   ```bash
+   gemini extensions install .
+   ```
+
 ## Contributing
 
-As a community-led project by **GDG Accra**, contributions are welcome! Whether it's adding support for Cloud Functions, Secret Manager, or improving the AI's reasoning, feel free to open an issue or submit a PR.
+Whether it's adding support for Cloud Functions, Secret Manager, or improving the AI's reasoning, feel free to open an issue or submit a PR.
 
 ## License
 
