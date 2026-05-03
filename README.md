@@ -22,10 +22,13 @@
 
 ## Installation
 
-Install directly via the Gemini CLI:
+To use this extension, clone the repository and link it to your Gemini CLI locally:
 
 ```bash
-gemini extensions install https://github.com/KojoShaddy/kojo-deploy-ai
+git clone https://github.com/KojoShaddy/kojo-deploy-ai
+cd kojo-deploy-ai
+npm install
+gemini extensions link .
 ```
 
 ## Usage Examples
