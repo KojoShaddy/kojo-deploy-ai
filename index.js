@@ -10,6 +10,37 @@ const server = new McpServer({
 });
 
 /**
+ * Tool: initialize_project
+ * Maps to: npx kojo-deploy init --project <projectName> --region <region>
+ */
+server.registerTool(
+  'initialize_project',
+  {
+    projectName: z.string().describe('The name of the GCP project'),
+    region: z.string().default('us-central1').describe('The GCP region')
+  },
+  async ({ projectName, region }) => {
+    return new Promise((resolve) => {
+      // This calls the init/setup command of kojo-deploy
+      const cmd = `npx --yes kojo-deploy init --project ${projectName} --region ${region}`;
+
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          resolve({
+            content: [{ type: 'text', text: `❌ Initialization failed:\n${stderr || error.message}` }],
+            isError: true
+          });
+          return;
+        }
+        resolve({
+          content: [{ type: 'text', text: stdout || 'Project initialized successfully!' }]
+        });
+      });
+    });
+  }
+);
+
+/**
  * Tool: deploy_service
  * Maps to: npx kojo-deploy push <service> --env <env>
  */

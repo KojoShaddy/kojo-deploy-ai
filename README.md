@@ -49,6 +49,7 @@ This extension acts as an **MCP Server**. It creates a virtual bridge using Stan
 
 | Tool | Action | Description |
 | :--- | :--- | :--- |
+| `initialize_project` | `npx kojo-deploy init` | Automatically creates `kojo.json` with your project settings. |
 | `deploy_service` | `npx kojo-deploy push` | Triggers a Cloud Build and deploys a new revision to Cloud Run. |
 | `get_deploy_status` | `npx kojo-deploy status` | Fetches the URL, traffic split, and health of the service. |
 
