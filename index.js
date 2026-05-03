@@ -33,12 +33,27 @@ server.registerTool(
     projectName: z.string().describe('The name of the GCP project'),
     region: z.string().default('us-central1').describe('The GCP region')
   },
-  async ({ projectName, region }) => {
-    log(`Tool call: initialize_project for ${projectName}`);
-    return new Promise((resolve) => {
-      const cmd = `npx --yes kojo-deploy init --project ${projectName} --region ${region}`;
+  async (args) => {
+    log(`Tool call: initialize_project with args: ${JSON.stringify(args)}`);
+    
+    // Destructure after logging to see what we actually got
+    const { projectName, region } = args;
+    
+    if (!projectName) {
+      return {
+        content: [{ type: 'text', text: '❌ Error: projectName is required but was undefined.' }],
+        isError: true
+      };
+    }
 
-      exec(cmd, (error, stdout, stderr) => {
+    return new Promise((resolve) => {
+      // Use npx.cmd on Windows to avoid execution policy issues
+      const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+      const cmd = `${npxCmd} --yes kojo-deploy init --project ${projectName} --region ${region}`;
+
+      log(`Executing command: ${cmd}`);
+
+      exec(cmd, { timeout: 30000 }, (error, stdout, stderr) => {
         if (error) {
           log(`Error in initialize_project: ${error.message}`);
           resolve({
@@ -47,6 +62,7 @@ server.registerTool(
           });
           return;
         }
+        log(`Command output: ${stdout}`);
         resolve({
           content: [{ type: 'text', text: stdout || 'Project initialized successfully!' }]
         });
@@ -65,12 +81,24 @@ server.registerTool(
     service: z.string().describe('The name of the service or application to deploy'),
     env: z.enum(['staging', 'prod', 'dev']).default('staging').describe('The target environment (staging, prod, or dev)'),
   },
-  async ({ service, env }) => {
-    log(`Tool call: deploy_service for ${service} in ${env}`);
-    return new Promise((resolve) => {
-      const cmd = `npx --yes kojo-deploy push ${service} --env ${env}`;
+  async (args) => {
+    log(`Tool call: deploy_service with args: ${JSON.stringify(args)}`);
+    const { service, env } = args;
 
-      exec(cmd, (error, stdout, stderr) => {
+    if (!service) {
+      return {
+        content: [{ type: 'text', text: '❌ Error: service name is required.' }],
+        isError: true
+      };
+    }
+
+    return new Promise((resolve) => {
+      const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+      const cmd = `${npxCmd} --yes kojo-deploy push ${service} --env ${env}`;
+
+      log(`Executing command: ${cmd}`);
+
+      exec(cmd, { timeout: 120000 }, (error, stdout, stderr) => {
         if (error) {
           log(`Error in deploy_service: ${error.message}`);
           resolve({
@@ -79,6 +107,7 @@ server.registerTool(
           });
           return;
         }
+        log(`Command output: ${stdout}`);
         resolve({
           content: [{ type: 'text', text: `✅ Deployment successful!\n\n${stdout}` }]
         });
@@ -96,12 +125,24 @@ server.registerTool(
   {
     service: z.string().describe('The service name to check the status for')
   },
-  async ({ service }) => {
-    log(`Tool call: get_deploy_status for ${service}`);
-    return new Promise((resolve) => {
-      const cmd = `npx --yes kojo-deploy status ${service}`;
+  async (args) => {
+    log(`Tool call: get_deploy_status with args: ${JSON.stringify(args)}`);
+    const { service } = args;
 
-      exec(cmd, (error, stdout, stderr) => {
+    if (!service) {
+      return {
+        content: [{ type: 'text', text: '❌ Error: service name is required.' }],
+        isError: true
+      };
+    }
+
+    return new Promise((resolve) => {
+      const npxCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+      const cmd = `${npxCmd} --yes kojo-deploy status ${service}`;
+
+      log(`Executing command: ${cmd}`);
+
+      exec(cmd, { timeout: 30000 }, (error, stdout, stderr) => {
         if (error) {
           log(`Error in get_deploy_status: ${error.message}`);
           resolve({
@@ -110,6 +151,7 @@ server.registerTool(
           });
           return;
         }
+        log(`Command output: ${stdout}`);
         resolve({
           content: [{ type: 'text', text: stdout || `No status information returned for ${service}.` }]
         });
