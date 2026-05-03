@@ -59,6 +59,11 @@ This extension acts as an **MCP Server**. It creates a virtual bridge using Stan
 | `deploy_service` | `npx kojo-deploy push` | Triggers a Cloud Build and deploys a new revision to Cloud Run. |
 | `get_deploy_status` | `npx kojo-deploy status` | Fetches the URL, traffic split, and health of the service. |
 
+## Troubleshooting
+
+### Windows Installation Issues
+If you encounter an `EBUSY` error or folder locking issues while installing on Windows, please refer to the [Windows Fix Guide](WINDOWS_FIX.md).
+
 ## Uninstallation & Disabling
 
 ### 1. The Standard Uninstall
