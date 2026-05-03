@@ -102,4 +102,14 @@ server.registerTool(
 
 // Establish the connection via Standard Input/Output
 const transport = new StdioServerTransport();
+
+// Add this error handler to see why it's dropping
+server.onerror = (error) => console.error('[MCP Error]', error);
+
 await server.connect(transport);
+
+// IMPORTANT for Windows: Ensure the process doesn't hang or buffer
+process.on('SIGINT', async () => {
+  await server.close();
+  process.exit(0);
+});
