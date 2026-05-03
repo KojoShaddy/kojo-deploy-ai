@@ -1,5 +1,8 @@
 # 🚀 kojo-deploy-ai
 
+[![npm package](https://img.shields.io/badge/npm-kojo--deploy-blue)](https://www.npmjs.com/package/kojo-deploy)
+[![github repo](https://img.shields.io/badge/github-repo-black?logo=github)](https://github.com/KojoShaddy/Kojo-Deploy)
+
 ### The AI Orchestrator for Google Cloud Run.
 
 `kojo-deploy-ai` is a Gemini CLI extension that brings natural language power to your Google Cloud infrastructure. Built on the Model Context Protocol (MCP), it wraps the `kojo-deploy` toolkit to allow you to manage, monitor, and push containerized services to Google Cloud Run using simple conversational commands.
