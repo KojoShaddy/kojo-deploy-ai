@@ -2,8 +2,22 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { exec } from 'child_process';
 import { z } from 'zod';
+import fs from 'fs';
+import path from 'path';
 
-// Initialize the MCP Server with the new name
+// Debug logging
+const logFile = path.join(process.cwd(), 'mcp-debug.log');
+const log = (msg) => {
+  try {
+    fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${msg}\n`);
+  } catch (e) {
+    // Ignore log errors
+  }
+};
+
+log('MCP Server process starting...');
+
+// Initialize the MCP Server
 const server = new McpServer({
   name: 'kojo-deploy-ai-bridge',
   version: '1.0.0',
@@ -20,12 +34,13 @@ server.registerTool(
     region: z.string().default('us-central1').describe('The GCP region')
   },
   async ({ projectName, region }) => {
+    log(`Tool call: initialize_project for ${projectName}`);
     return new Promise((resolve) => {
-      // This calls the init/setup command of kojo-deploy
       const cmd = `npx --yes kojo-deploy init --project ${projectName} --region ${region}`;
 
       exec(cmd, (error, stdout, stderr) => {
         if (error) {
+          log(`Error in initialize_project: ${error.message}`);
           resolve({
             content: [{ type: 'text', text: `❌ Initialization failed:\n${stderr || error.message}` }],
             isError: true
@@ -51,12 +66,13 @@ server.registerTool(
     env: z.enum(['staging', 'prod', 'dev']).default('staging').describe('The target environment (staging, prod, or dev)'),
   },
   async ({ service, env }) => {
+    log(`Tool call: deploy_service for ${service} in ${env}`);
     return new Promise((resolve) => {
-      // --yes ensures npx doesn't pause for confirmation in the background
       const cmd = `npx --yes kojo-deploy push ${service} --env ${env}`;
 
       exec(cmd, (error, stdout, stderr) => {
         if (error) {
+          log(`Error in deploy_service: ${error.message}`);
           resolve({
             content: [{ type: 'text', text: `❌ Deployment failed for ${service}:\n${stderr || error.message}` }],
             isError: true
@@ -81,11 +97,13 @@ server.registerTool(
     service: z.string().describe('The service name to check the status for')
   },
   async ({ service }) => {
+    log(`Tool call: get_deploy_status for ${service}`);
     return new Promise((resolve) => {
       const cmd = `npx --yes kojo-deploy status ${service}`;
 
       exec(cmd, (error, stdout, stderr) => {
         if (error) {
+          log(`Error in get_deploy_status: ${error.message}`);
           resolve({
             content: [{ type: 'text', text: `⚠️ Could not retrieve status for ${service}:\n${stderr || error.message}` }],
             isError: true
@@ -103,13 +121,18 @@ server.registerTool(
 // Establish the connection via Standard Input/Output
 const transport = new StdioServerTransport();
 
-// Add this error handler to see why it's dropping
-server.onerror = (error) => console.error('[MCP Error]', error);
-
-await server.connect(transport);
+log('Attempting to connect transport...');
+try {
+  await server.connect(transport);
+  log('Connected successfully.');
+} catch (error) {
+  log(`Failed to connect: ${error.message}`);
+  process.exit(1);
+}
 
 // IMPORTANT for Windows: Ensure the process doesn't hang or buffer
 process.on('SIGINT', async () => {
+  log('Received SIGINT, closing...');
   await server.close();
   process.exit(0);
 });
