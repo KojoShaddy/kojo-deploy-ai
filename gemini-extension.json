@@ -5,6 +5,7 @@
   "mcpServers": {
     "kojo_mcp": {
       "command": "node",
+      "args": ["${extensionPath}${/}index.js"],
       "cwd": "${extensionPath}"
     }
   }
