@@ -1,0 +1,12 @@
+{
+  "name": "kojo-deploy-ai",
+  "version": "1.0.0",
+  "description": "AI-powered deployment orchestration for Kojo-Deploy",
+  "mcpServers": {
+    "kojo_mcp": {
+      "command": "node",
+      "args": ["${extensionPath}/index.js"],
+      "cwd": "${extensionPath}"
+    }
+  }
+}
