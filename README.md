@@ -53,6 +53,24 @@ This extension acts as an **MCP Server**. It creates a virtual bridge using Stan
 | `deploy_service` | `npx kojo-deploy push` | Triggers a Cloud Build and deploys a new revision to Cloud Run. |
 | `get_deploy_status` | `npx kojo-deploy status` | Fetches the URL, traffic split, and health of the service. |
 
+## Uninstallation & Disabling
+
+### 1. The Standard Uninstall
+The cleanest way to remove it completely from your Gemini CLI is by using the uninstall command:
+
+```bash
+gemini extensions uninstall kojo-deploy-ai
+```
+
+### 2. The "Soft" Disable
+If you don't want to delete it but just want to turn it off so Gemini stops using those tools for a while, you can simply disable it:
+
+```bash
+gemini extensions disable kojo-deploy-ai
+```
+
+To turn it back on later, just run `gemini extensions enable kojo-deploy-ai`.
+
 ## Contributing
 
 As a community-led project by **GDG Accra**, contributions are welcome! Whether it's adding support for Cloud Functions, Secret Manager, or improving the AI's reasoning, feel free to open an issue or submit a PR.
