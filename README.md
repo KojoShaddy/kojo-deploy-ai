@@ -16,20 +16,23 @@
 
 ## Prerequisites
 
-- **Gemini CLI**: `npm install -g @google/gemini-cli`
-- **Google Cloud CLI**: Ensure `gcloud` is installed and authenticated on your machine.
-- **Kojo-Deploy**: Your project should have a valid `kojo.json` or configuration compatible with the `kojo-deploy` workflow.
+- **Gemini CLI**: Install the official AI agent for your terminal: `npm install -g @google/gemini-cli`
+- **Google Cloud CLI**: Ensure the `gcloud` tool is installed and authenticated (`gcloud auth login`) so the extension can interact with your Google Cloud account.
+- **Node.js**: Version 20 or higher is required.
 
 ## Installation
 
-To use this extension, clone the repository and link it to your Gemini CLI locally:
+You can install `kojo-deploy-ai` directly from GitHub with one command:
 
 ```bash
-git clone https://github.com/KojoShaddy/kojo-deploy-ai
-cd kojo-deploy-ai
-npm install
-gemini extensions link .
+gemini extensions install https://github.com/KojoShaddy/kojo-deploy-ai
 ```
+
+## Getting Started
+
+Once installed, simply type `gemini` in your terminal to start the interactive mode. You don't need to manually create any configuration files. Just ask the AI to help you get started:
+
+> "I want to deploy this folder to Google Cloud Run. Can you help me set it up?"
 
 ## Usage Examples
 
