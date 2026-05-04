@@ -104,5 +104,5 @@ This project is licensed under the MIT License.
 
 ---
 
-Built with love by **Shadrack Inusah (Kojo Shaddy)**
+Built with ❤️ by **Shadrack Inusah (Kojo Shaddy)**
 *Software Developer | Open Source Contributor | Lead @ GDG Accra*
